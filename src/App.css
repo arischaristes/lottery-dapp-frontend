@@ -1,38 +1,154 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+.mainContainer{
+  background-color: #efefef;
   min-height: 100vh;
+  font-family: "League Spartan", sans-serif;
+}
+
+.headerContainer {
+  padding: 40px 0;
+  margin-left: 50px;
+  text-align: left;
+}
+
+.headerTitle {
+  font-family: "League Spartan", sans-serif;
+  font-size: 3.5rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.itemsContainer {
+  display: flex;
+  flex: 1 0 30%;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding: 20px;
+  gap: 20px;
+}
+
+.itemContainer {
+  flex: 1 0 30%;
+  max-width: 30%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  background-color: #efefef;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-.App-link {
-  color: #61dafb;
+.itemTitle {
+  font-size: 1.5em;
+  font-weight: bold;
+  padding: 15px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.itemImageContainer {
+  width: 100%;
+  height: 350px;
+  flex: 1 0 auto;
+}
+
+.itemImage {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+.itemLabel {
+  width: 100%;
+  padding: 10px 0;
+  border-top: 1px solid #e0e0e0;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  border-radius: 0 0 8px 8px;
+  text-align: center;
+}
+
+.bidButton {
+  font-family: "League Spartan", sans-serif;
+  display: inline-block;
+  width: auto;
+  font-size: 1.5em;
+  background-color: #efefef;
+  padding-top:10px;
+  font-weight: bold;
+  text-align: center;
+  border: 0px;
+  cursor: pointer;
+}
+
+.button {
+  background-color: #000000;
+  color: #ffffff;
+  padding: 10px 20px;
+  font-family: "League Spartan", sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  display: inline-block;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.button:hover {
+  background-color: #333333;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.button:active {
+  background-color: #000000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+.bottomContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 20px;
+  padding: 20px;
+}
+
+.bottomLeftContainer {
+  margin-left: 20px;
+}
+
+.rightInnerContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.addressLabel {
+  display: block;
+  font-size: 1.5rem;
+  padding-bottom: 20px;
+}
+
+.inputField {
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 540px;
 }
