@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/lottery-dapp-frontend/static/css/main.d62ac211.css",
+    "main.js": "/lottery-dapp-frontend/static/js/main.d6fd3e25.js",
+    "static/js/592.1dc761b7.chunk.js": "/lottery-dapp-frontend/static/js/592.1dc761b7.chunk.js",
+    "index.html": "/lottery-dapp-frontend/index.html",
+    "main.d62ac211.css.map": "/lottery-dapp-frontend/static/css/main.d62ac211.css.map",
+    "main.d6fd3e25.js.map": "/lottery-dapp-frontend/static/js/main.d6fd3e25.js.map",
+    "592.1dc761b7.chunk.js.map": "/lottery-dapp-frontend/static/js/592.1dc761b7.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d62ac211.css",
+    "static/js/main.d6fd3e25.js"
+  ]
+}
