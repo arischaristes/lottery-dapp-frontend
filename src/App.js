@@ -11,6 +11,7 @@ function Lottery() {
   const [eventListenerSet, setEventListenerSet] = useState(false);
   const [providerError, setProviderError] = useState(false);
   const [accessError, setAccessError] = useState(false);
+  const [networkError, setNetworkError] = useState(false);
   const [contractBalance, setContractBalance] = useState('');
   const { isAddress } = require('web3-validator');
   const [winnersDeclared, setWinnersDeclared] = useState(false)
@@ -67,12 +68,37 @@ function Lottery() {
     }
   }
 
+  const checkMetamask = async () => {
+    if (typeof window.ethereum === "undefined") {
+      setAccessError(true)
+      return false;
+    }
+    setAccessError(false)
+    return true;
+  };
+
+  const checkNetwork = async () => {
+    const sepoliaId = await web3.eth.net.getId();
+    if (window.ethereum && sepoliaId !== 11155111n) {
+      setNetworkError(true)
+      return false;
+    }
+    setNetworkError(false)
+    return true;
+  };
+
   const getItems = async () => {
+    if ((await checkNetwork()) === false || (await checkMetamask()) === false) {
+      return;
+    }
     const itemsFromContract = await lottery.methods.getItems().call();
     setItems(itemsFromContract);
   };
 
   const getWinnersDeclaredStatus = async () => {
+    if ((await checkNetwork()) === false || (await checkMetamask()) === false) {
+      return;
+    }
     const status = await lottery.methods.getWinnersDeclaredStatus().call();
     setWinnersDeclared(status)
   }
@@ -85,6 +111,9 @@ function Lottery() {
   }
 
   const getOwners = async () => {
+    if ((await checkNetwork()) === false || (await checkMetamask()) === false) {
+      return;
+    }
     const ownersFromContract = await lottery.methods.getOwners().call();
     setOwners(ownersFromContract)
   }
@@ -94,12 +123,12 @@ function Lottery() {
       <div className="itemsContainer">
         {items.map((item, index) => (
           <div key={index} className="itemContainer">
-            <div class="itemTitle">{index+1}. a brand new {itemName[index]}</div>
+            <div className="itemTitle">{index+1}. a brand new {itemName[index]}</div>
             <div className="itemImageContainer">
               <img src={images[item.itemId.toString()]} alt={`Item ${item.itemId.toString()}`} className="itemImage"/>
             </div>
             {!owners.includes(currentAccount) && !winnersDeclared && (
-              <button className="bidButton" onClick={() => bid(item.itemId.toString())}>bid here!</button>
+              <button className="bidButton" onClick={() => bid(item.itemId.toString())}>Bid</button>
             )}
             <label className="itemLabel">total bids: {item.itemTokens ? item.itemTokens.length : 0}</label>
           </div>
@@ -125,6 +154,9 @@ function Lottery() {
   }
 
   const getContractBalance = async () => {
+    if ((await checkNetwork()) === false || (await checkMetamask()) === false) {
+      return;
+    }
     await web3.eth.getBalance(lottery.options.address)
       .then(balance => {
         const balanceInEther = web3.utils.fromWei(balance, 'ether');
@@ -196,12 +228,13 @@ function Lottery() {
     for (let i = 0; i < items.length; i++) {
       if (currentAccount === web3.utils.toChecksumAddress(items[i].winner)) {
         won = true
-        alert("congratulations, you have won a brand new " + itemName[i]);
+        let id = parseInt(items[i].itemId) + 1
+        alert("congratulations, you have won a brand new " + itemName[i] + " (" + (id).toString() + ")");
       }
     }
 
     if (!won) {
-      alert("unfortunately you didnt win anything this time...");
+      alert("unfortunately you didnt win anything this time... (0)");
     }
   }
 
@@ -220,18 +253,23 @@ function Lottery() {
 
   return (
     <div className="mainContainer">
-      { providerError && (
+      {providerError && (
         <div className="headerContainer">
           <h2 className="headerTitle">metamask is not installed...</h2>
           <h2 className="headerTitle">please install metamask and reload the page...</h2>
         </div>
       )}
-      { accessError && (
+      {accessError && (
         <div className="headerContainer">
           <h2 className="headerTitle">there was an error connecting with metamask...</h2>
         </div>
       )}
-      {!providerError && !accessError && (
+      {networkError && (
+        <div className="headerContainer">
+          <h2 className="headerTitle">please connect to the sepolia network...</h2>
+        </div>
+      )}
+      {!providerError && !accessError && !networkError && (
       <>
         <div className="headerContainer">
           <h1 className="headerTitle">your chance to win_ </h1>
@@ -244,8 +282,9 @@ function Lottery() {
             <label className="addressLabel">current address:</label>
             <label className="addressLabel">{ currentAccount }</label>
           {!owners.includes(currentAccount) && winnersDeclared && (
-            <button className="button" onClick={handleCheckWinner}>did i win?</button>
+            <button className="button" onClick={handleCheckWinner}>Am I Winner</button>
           )}
+            <button className="button">Reveal</button>
           </div>
           <div className="bottomLeftContainer">
             <label className="addressLabel">contract balance: {contractBalance}</label>
@@ -258,8 +297,8 @@ function Lottery() {
             {owners.includes(currentAccount) && (
             <>
               <div className="rightInnerContainer">
-                <button className="button" onClick={handleDeclareWinners}>declare winners</button>
-                <button className="button" onClick={handleWithdraw}>withdraw</button>
+                <button className="button" onClick={handleDeclareWinners}>Declare Winner</button>
+                <button className="button" onClick={handleWithdraw}>Withdraw</button>
                 <button className="button" onClick={handleReset}>reset</button>
                 <button className="button" onClick={handleTransferOwnership}>transfer ownership</button>
                 <button className="button" onClick={handleDestroy}>destroy</button>
